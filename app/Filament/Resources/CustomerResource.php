@@ -35,7 +35,18 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
+                                         ->searchable()
+                                         ->sortable(),
+                Tables\Columns\TextColumn::make('phone')
+                                         ->prefix('+62')
+                                         ->url(function (Customer $customer) {
+                                             return 'https://wa.me/'.$customer->whatsapp_phone;
+                                         }, true),
+                Tables\Columns\TextColumn::make('notes')
+                                         ->html()
+                                         ->wrap(),
+
             ])
             ->filters([
                 //
