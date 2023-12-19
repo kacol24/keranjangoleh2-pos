@@ -17,11 +17,18 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'MASTER';
+
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $navigationParentItem = 'Products';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name'),
+                Forms\Components\TextInput::make('name')
+                                          ->required(),
                 Forms\Components\Toggle::make('is_active'),
             ]);
     }

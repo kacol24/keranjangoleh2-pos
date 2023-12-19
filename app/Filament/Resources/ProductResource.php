@@ -8,17 +8,23 @@ use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationGroup = 'MASTER';
+
+    protected static ?int $navigationSort = 0;
 
     public static function form(Form $form): Form
     {
@@ -61,10 +67,18 @@ class ProductResource extends Resource
                                 ]),
                          Section::make('Relations')
                                 ->schema([
-                                    Forms\Components\Select::make('brand_id')
-                                                           ->relationship('brand', 'name')
-                                                           ->preload()
-                                                           ->searchable(),
+                                    Select::make('brand_id')
+                                          ->relationship('brand', 'name')
+                                          ->preload()
+                                          ->searchable(),
+                                    Select::make('categories')
+                                          ->multiple()
+                                          ->relationship(
+                                              titleAttribute: 'name',
+                                              modifyQueryUsing: fn(Builder $query) => $query->active()->ordered(),
+                                          )
+                                          ->preload()
+                                          ->searchable(),
                                 ]),
                      ]),
 
@@ -75,7 +89,19 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
+                                         ->searchable()
+                                         ->sortable(),
+                Tables\Columns\TextColumn::make('sku_code')
+                                         ->toggleable(isToggledHiddenByDefault: true)
+                                         ->searchable(),
+                Tables\Columns\TextColumn::make('brand.name'),
+                Tables\Columns\TextColumn::make('categories.name'),
+                Tables\Columns\TextColumn::make('price')
+                                         ->prefix('Rp')
+                                         ->sortable()
+                                         ->formatStateUsing(fn($state) => number_format($state, 0, ',', '.')),
+                Tables\Columns\ToggleColumn::make('is_active'),
             ])
             ->filters([
                 //
