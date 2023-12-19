@@ -35,7 +35,17 @@ class BrandResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
+                                         ->searchable()
+                                         ->sortable(),
+                Tables\Columns\TextColumn::make('phone')
+                                         ->prefix('+62')
+                                         ->url(function (Brand $entity) {
+                                             return 'https://wa.me/'.$entity->whatsapp_phone;
+                                         }, true),
+                Tables\Columns\TextColumn::make('notes')
+                                         ->html()
+                                         ->wrap(),
             ])
             ->filters([
                 //
