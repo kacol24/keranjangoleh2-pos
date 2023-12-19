@@ -11,7 +11,6 @@ class Category extends Model
 
     protected $fillable = [
         'is_active',
-        'is_featured',
         'name',
         'order_column',
     ];

@@ -22,7 +22,7 @@ class CategoryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name'),
-                Forms\Components\Toggle::make('is_featured'),
+                Forms\Components\Toggle::make('is_active'),
             ]);
     }
 
@@ -32,7 +32,7 @@ class CategoryResource extends Resource
             ->reorderable('order_column')
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\ToggleColumn::make('is_featured'),
+                Tables\Columns\ToggleColumn::make('is_active'),
             ])
             ->filters([
                 //

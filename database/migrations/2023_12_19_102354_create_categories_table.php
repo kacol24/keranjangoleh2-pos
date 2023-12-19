@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->boolean('is_active')->default(true);
-            $table->boolean('is_featured')->default(false);
 
             $table->string('name')->index();
             $table->unsignedBigInteger('order_column')->default(1);
